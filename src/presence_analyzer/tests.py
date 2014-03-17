@@ -21,14 +21,14 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
     Views tests.
     """
 
-    def set_up(self):
+    def setUp(self):
         """
         Before each test, set up a environment.
         """
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
         self.client = main.app.test_client()
 
-    def tear_down(self):
+    def tearDown(self):
         """
         Get rid of unused objects after each test.
         """
@@ -59,13 +59,13 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     Utility functions tests.
     """
 
-    def set_up(self):
+    def setUp(self):
         """
         Before each test, set up a environment.
         """
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
 
-    def tear_down(self):
+    def tearDown(self):
         """
         Get rid of unused objects after each test.
         """
