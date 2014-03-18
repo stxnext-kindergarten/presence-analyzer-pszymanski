@@ -61,11 +61,11 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         data = utils.get_data()
 
         #user_10
-        user_10 = self.client.get('/api/v1/mean_time_weekday/10')
-        self.assertEqual(user_10.status_code, 200)
-        self.assertEqual(user_10.content_type, 'application/json')
-        data = json.loads(user_10.data)
-        self.assertEqual(data, [
+        resp = self.client.get('/api/v1/mean_time_weekday/10')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertListEqual(data, [
             [u'Mon', 0],
             [u'Tue', 30047.0],
             [u'Wed', 24465.0],
@@ -75,11 +75,11 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             [u'Sun', 0], ])
 
         #user_11
-        user_11 = self.client.get('/api/v1/mean_time_weekday/11')
-        self.assertEqual(user_11.status_code, 200)
-        self.assertEqual(user_11.content_type, 'application/json')
-        data = json.loads(user_11.data)
-        self.assertEqual(data, [
+        resp = self.client.get('/api/v1/mean_time_weekday/11')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertListEqual(data, [
             [u'Mon', 24123.0],
             [u'Tue', 16564.0],
             [u'Wed', 25321.0],
@@ -96,11 +96,11 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         data = utils.get_data()
 
         #user_10
-        user_10 = self.client.get('/api/v1/presence_weekday/10')
-        self.assertEqual(user_10.status_code, 200)
-        self.assertEqual(user_10.content_type, 'application/json')
-        data = json.loads(user_10.data)
-        self.assertEqual(data, [
+        resp = self.client.get('/api/v1/presence_weekday/10')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertListEqual(data, [
             [u'Weekday', u'Presence (s)'],
             [u'Mon', 0],
             [u'Tue', 30047],
@@ -111,11 +111,11 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             [u'Sun', 0], ])
 
         #user_11
-        user_11 = self.client.get('/api/v1/presence_weekday/11')
-        self.assertEqual(user_11.status_code, 200)
-        self.assertEqual(user_11.content_type, 'application/json')
-        data = json.loads(user_11.data)
-        self.assertEqual(data, [
+        resp = self.client.get('/api/v1/presence_weekday/11')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertListEqual(data, [
             [u'Weekday', u'Presence (s)'],
             [u'Mon', 24123],
             [u'Tue', 16564],
@@ -164,24 +164,28 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         #user_10
         user_10 = utils.group_by_weekday(import_data[10])
         self.assertEqual(user_10.keys(), range(7))
-        self.assertEqual(user_10[0], [])
-        self.assertEqual(user_10[1], [30047])
-        self.assertEqual(user_10[2], [24465])
-        self.assertEqual(user_10[3], [23705])
-        self.assertEqual(user_10[4], [])
-        self.assertEqual(user_10[5], [])
-        self.assertEqual(user_10[6], [])
+        self.assertDictEqual(user_10, {
+            0: [],
+            1: [30047],
+            2: [24465],
+            3: [23705],
+            4: [],
+            5: [],
+            6: [],
+        })
 
         #user_11
         user_11 = utils.group_by_weekday(import_data[11])
         self.assertEqual(user_11.keys(), range(7))
-        self.assertEqual(user_11[0], [24123])
-        self.assertEqual(user_11[1], [16564])
-        self.assertEqual(user_11[2], [25321])
-        self.assertEqual(user_11[3], [22969, 22999])
-        self.assertEqual(user_11[4], [6426])
-        self.assertEqual(user_11[5], [])
-        self.assertEqual(user_11[6], [])
+        self.assertDictEqual(user_11, {
+            0: [24123],
+            1: [16564],
+            2: [25321],
+            3: [22969, 22999],
+            4: [6426],
+            5: [],
+            6: [],
+        })
 
     def test_seconds_since_midnight(self):
         """
@@ -241,6 +245,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         float(sum(items)) / len(items) if len(items) > 0 else 0
         """
 
+        self.assertAlmostEqual(utils.mean([0.2, 0.4, 0.3]), 0.3)
         self.assertEqual(utils.mean([0, 0, 0]), 0)
         self.assertEqual(utils.mean([0, 10]), 5)
         self.assertEqual(utils.mean([10, 10]), 10)
