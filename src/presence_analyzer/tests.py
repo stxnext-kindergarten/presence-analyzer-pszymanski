@@ -58,7 +58,6 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Test correct return of mean presence time of given user
         grouped by weekday.
         """
-        data = utils.get_data()
 
         #user_10
         resp = self.client.get('/api/v1/mean_time_weekday/10')
@@ -93,7 +92,6 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Test correct return of total presence time of given user
         grouped by weekday.
         """
-        data = utils.get_data()
 
         #user_10
         resp = self.client.get('/api/v1/presence_weekday/10')
