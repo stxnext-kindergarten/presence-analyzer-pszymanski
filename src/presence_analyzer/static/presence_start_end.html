@@ -104,8 +104,8 @@
                         $.getJSON("/api/v1/presence_start_end/"+selected_user, function(result) {
                             if (result.length != 0){
                                 $.each(result, function(index, value) {
-                                value[1] = parseInterval(value[1]);
-                                value[2] = parseInterval(value[2]);
+                                    value[1] = parseInterval(value[1]);
+                                    value[2] = parseInterval(value[2]);
                                 }
                                 var data = new google.visualization.DataTable();
                                 data.addColumn('string', 'Weekday');

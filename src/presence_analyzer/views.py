@@ -13,7 +13,7 @@ from presence_analyzer.utils import (
     mean,
     group_by_weekday,
     mean_group_by_weekday_seconds
-    )
+)
 
 
 import logging
