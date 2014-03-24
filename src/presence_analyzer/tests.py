@@ -123,6 +123,39 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             [u'Sat', 0],
             [u'Sun', 0], ])
 
+    def test_presence_start_end_view(self):
+        """
+        Test correct return of average time for start and end work.
+        """
+
+        #user_10
+        resp = self.client.get('/api/v1/presence_start_end/10')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertListEqual(data, [
+            [u'Mon', 0, 0],
+            [u'Tue', 34745.0, 64792.0],
+            [u'Wed', 33592.0, 58057.0],
+            [u'Thu', 38926.0, 62631.0],
+            [u'Fri', 0, 0],
+            [u'Sat', 0, 0],
+            [u'Sun', 0, 0], ])
+
+        #user_11
+        resp = self.client.get('/api/v1/presence_start_end/11')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertListEqual(data, [
+            [u'Mon', 33134.0, 57257.0],
+            [u'Tue', 33590.0, 50154.0],
+            [u'Wed', 33206.0, 58527.0],
+            [u'Thu', 35602.0, 58586.0],
+            [u'Fri', 47816.0, 54242.0],
+            [u'Sat', 0, 0],
+            [u'Sun', 0, 0]])
+
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     """
@@ -184,6 +217,37 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             5: [],
             6: [],
         })
+
+    def test_mean_group_by_weekday_seconds(self):
+        """
+        Testing groups presence entries by weekday with seconds
+        """
+        import_data = utils.get_data()
+        #user_10
+        user_10 = utils.mean_group_by_weekday_seconds(import_data[10])
+        self.assertEqual(user_10.keys(), range(7))
+        self.assertDictEqual(user_10, {
+            0: {'end': [], 'start': []},
+            1: {'end': [64792], 'start': [34745]},
+            2: {'end': [58057], 'start': [33592]},
+            3: {'end': [62631], 'start': [38926]},
+            4: {'end': [], 'start': []},
+            5: {'end': [], 'start': []},
+            6: {'end': [], 'start': []}
+            })
+
+        #user_11
+        user_11 = utils.mean_group_by_weekday_seconds(import_data[11])
+        self.assertEqual(user_11.keys(), range(7))
+        self.assertDictEqual(user_11, {
+            0: {'end': [57257], 'start': [33134]},
+            1: {'end': [50154], 'start': [33590]},
+            2: {'end': [58527], 'start': [33206]},
+            3: {'end': [60085, 57087], 'start': [37116, 34088]},
+            4: {'end': [54242], 'start': [47816]},
+            5: {'end': [], 'start': []},
+            6: {'end': [], 'start': []}
+            })
 
     def test_seconds_since_midnight(self):
         """
