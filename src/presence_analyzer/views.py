@@ -7,8 +7,13 @@ import calendar
 from flask import redirect
 
 from presence_analyzer.main import app
-from presence_analyzer.utils import jsonify, get_data, mean, group_by_weekday
-from presence_analyzer.utils import mean_group_by_weekday_seconds
+from presence_analyzer.utils import (
+    jsonify,
+    get_data,
+    mean,
+    group_by_weekday,
+    mean_group_by_weekday_seconds
+    )
 
 
 import logging
