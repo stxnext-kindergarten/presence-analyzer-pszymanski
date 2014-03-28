@@ -6,6 +6,7 @@ import calendar
 from flask import redirect, url_for
 from flask.ext.mako import render_template, MakoTemplates
 from presence_analyzer.main import app
+from presence_analyzer import utils
 from presence_analyzer.utils import (
     jsonify,
     get_data,
@@ -65,6 +66,16 @@ def users_view():
     data = get_data()
     return [{'user_id': i, 'name': 'User {0}'.format(str(i))}
             for i in data.keys()]
+
+
+@app.route('/api/v2/users', methods=['GET'])
+@jsonify
+def users_view_xml():
+    """
+    Users listing with names and avatars for dropdown.
+    """
+    result = utils.import_user_data_xml()
+    return result
 
 
 @app.route('/api/v1/mean_time_weekday/')

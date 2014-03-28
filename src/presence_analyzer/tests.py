@@ -74,6 +74,27 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(len(data), 2)
         self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
 
+    def test_users_view_xml(self):
+        """
+        Test correct return new users api
+        """
+        resp = self.client.get('/api/v2/users')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        #self.assertEqual(len(data), 3)
+        #user_10
+        self.assertDictEqual(data['10'], {
+            u'avatar': u'https://intranet.stxnext.pl/api/images/users/10',
+            u'name': u'Maciej Z.'
+            })
+
+        #user_11
+        self.assertDictEqual(data['11'], {
+            u'avatar': u'https://intranet.stxnext.pl/api/images/users/11',
+            u'name': u'Maciej D.'
+            })
+
     def test_mean_time_weekday_view(self):
         """
         Test correct return of mean presence time of given user
