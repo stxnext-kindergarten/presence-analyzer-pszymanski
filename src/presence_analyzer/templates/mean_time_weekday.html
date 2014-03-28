@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+<%inherit file="base.html"/>
 
-{% block header %}Presence mean time by weekday{% endblock %}
+<%block name="header"> Presence mean time by weekday</%block>
 
-{% block javascript %}
+<%block name="javascript">
 <script type="text/javascript">
     google.load("visualization", "1", {
         packages: ["corechart", "timeline"],
@@ -18,7 +18,7 @@
     (function ($) {
         $(document).ready(function () {
             var loading = $('#loading');
-            $.getJSON("{{ url_for('users_view') }}", function (result) {
+            $.getJSON("${ url_for('users_view') }", function (result) {
                 var dropdown = $("#user_id");
                 $.each(result, function (item) {
                     dropdown.append($("<option />").val(this.user_id).text(this.name));
@@ -26,13 +26,14 @@
                 dropdown.show();
                 loading.hide();
             });
+
             $('#user_id').change(function () {
                 var selected_user = $("#user_id").val();
                 var chart_div = $('#chart_div');
                 if (selected_user) {
                     loading.show();
                     chart_div.hide();
-                    $.getJSON("{{ url_for('mean_time_weekday_view') }}" + selected_user, function (result) {
+                    $.getJSON("${ url_for('mean_time_weekday_view') }" + selected_user, function (result) {
                         $.each(result, function (index, value) {
                             value[1] = parseInterval(value[1]);
                         });
@@ -64,4 +65,4 @@
     })(jQuery);
 </script>
 
-{% endblock %}
+</%block>
