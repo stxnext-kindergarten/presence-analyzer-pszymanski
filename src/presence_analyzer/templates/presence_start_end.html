@@ -15,22 +15,25 @@
         return result;
     }
 
-    (function ($) {
-        $(document).ready(function () {
+    (function($) {
+        $(document).ready(function(){
             var loading = $('#loading');
-            $.getJSON("${ url_for('users_view') }", function (result) {
+            var users = [];
+            $.getJSON("/api/v2/users", function(result) {
                 var dropdown = $("#user_id");
-                $.each(result, function (item) {
-                    dropdown.append($("<option />").val(this.user_id).text(this.name));
+                $.each(result, function(item) {
+                    dropdown.append($("<option />").val(item).text(this.name));
                 });
+                users = result;
                 dropdown.show();
                 loading.hide();
             });
-
-            $('#user_id').change(function () {
+            $('#user_id').change(function(){
                 var selected_user = $("#user_id").val();
                 var chart_div = $('#chart_div');
-                if (selected_user) {
+                if(selected_user) {
+                    var newImage = (users[selected_user]['avatar']);
+                    $('#avatar').children('img').attr('src', newImage);
                     loading.show();
                     chart_div.hide();
                     $.getJSON("${ url_for('presence_start_end_view') }" + selected_user, function (result) {
@@ -38,7 +41,6 @@
                             value[1] = parseInterval(value[1]);
                             value[2] = parseInterval(value[2]);
                         })
-                        console.log(result);
                         var data = new google.visualization.DataTable();
 
                         data.addColumn('string', 'Weekday');

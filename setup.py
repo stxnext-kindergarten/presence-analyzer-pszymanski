@@ -31,7 +31,7 @@ setup(
     entry_points="""
     [console_scripts]
     flask-ctl = presence_analyzer.script:run
-
+    import_xml_url = presence_analyzer.utils:import_user_xml_form_url
     [paste.app_factory]
     main = presence_analyzer.script:make_app
     debug = presence_analyzer.script:make_debug

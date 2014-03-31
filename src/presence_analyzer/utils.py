@@ -3,16 +3,17 @@
 Helper functions used in views.
 """
 
+
 import csv
+import urllib
+import logging
 from json import dumps
+from lxml import etree
 from functools import wraps
-from datetime import datetime
-
 from flask import Response
-
+from datetime import datetime
 from presence_analyzer.main import app
 
-import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
 
 
@@ -67,6 +68,34 @@ def get_data():
             data.setdefault(user_id, {})[date] = {'start': start, 'end': end}
 
     return data
+
+
+def parse_user_data_xml():
+    """
+    Parse and format data from users.xml
+    """
+    with open('runtime/data/users.xml', 'r') as xmlfile:
+        tree = etree.parse(xmlfile)
+        server = tree.find('./server')
+        protocol = server.find('./protocol').text
+        host = server.find('./host').text
+        additional = '://'
+        url = protocol + additional + host
+        return {
+            user.attrib['id']: {
+                'name': user.find('./name').text,
+                'avatar': url + user.find('./avatar').text}
+            for user in tree.findall('./users/user')}
+
+
+def import_user_xml_form_url():
+    """
+    Import and save users.xml form URL
+    """
+    with open(app.config['USERS_DATA_XML'], 'wb') as local_file:
+        url = app.config['USERS_DATA_XML_URL']
+        web_file = urllib.urlopen("url")
+        local_file.write(web_file.read())
 
 
 def group_by_weekday(items):
