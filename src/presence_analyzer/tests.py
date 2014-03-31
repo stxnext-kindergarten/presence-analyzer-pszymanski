@@ -82,14 +82,13 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        #self.assertEqual(len(data), 3)
-        #user_10
+        # user_10
         self.assertDictEqual(data['10'], {
             u'avatar': u'https://intranet.stxnext.pl/api/images/users/10',
             u'name': u'Maciej Z.'
             })
 
-        #user_11
+        # user_11
         self.assertDictEqual(data['11'], {
             u'avatar': u'https://intranet.stxnext.pl/api/images/users/11',
             u'name': u'Maciej D.'
@@ -101,7 +100,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         grouped by weekday.
         """
 
-        #user_10
+        # user_10
         resp = self.client.get('/api/v1/mean_time_weekday/10')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
@@ -115,7 +114,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             [u'Sat', 0],
             [u'Sun', 0], ])
 
-        #user_11
+        # user_11
         resp = self.client.get('/api/v1/mean_time_weekday/11')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
@@ -135,7 +134,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         grouped by weekday.
         """
 
-        #user_10
+        # user_10
         resp = self.client.get('/api/v1/presence_weekday/10')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
@@ -150,7 +149,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             [u'Sat', 0],
             [u'Sun', 0], ])
 
-        #user_11
+        # user_11
         resp = self.client.get('/api/v1/presence_weekday/11')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
@@ -170,7 +169,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Test correct return of average time for start and end work.
         """
 
-        #user_10
+        # user_10
         resp = self.client.get('/api/v1/presence_start_end/10')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
@@ -184,7 +183,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             [u'Sat', 0, 0],
             [u'Sun', 0, 0], ])
 
-        #user_11
+        # user_11
         resp = self.client.get('/api/v1/presence_start_end/11')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
@@ -234,7 +233,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         Testing groups presence entries by weekday
         """
         import_data = utils.get_data()
-        #user_10
+        # user_10
         user_10 = utils.group_by_weekday(import_data[10])
         self.assertEqual(user_10.keys(), range(7))
         self.assertDictEqual(user_10, {
@@ -247,7 +246,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             6: [],
         })
 
-        #user_11
+        # user_11
         user_11 = utils.group_by_weekday(import_data[11])
         self.assertEqual(user_11.keys(), range(7))
         self.assertDictEqual(user_11, {
@@ -265,7 +264,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         Testing groups presence entries by weekday with seconds
         """
         import_data = utils.get_data()
-        #user_10
+        # user_10
         user_10 = utils.mean_group_by_weekday_seconds(import_data[10])
         self.assertEqual(user_10.keys(), range(7))
         self.assertDictEqual(user_10, {
@@ -278,7 +277,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             6: {'end': [], 'start': []}
             })
 
-        #user_11
+        # user_11
         user_11 = utils.mean_group_by_weekday_seconds(import_data[11])
         self.assertEqual(user_11.keys(), range(7))
         self.assertDictEqual(user_11, {
