@@ -70,9 +70,9 @@ def get_data():
     return data
 
 
-def import_user_data_xml():
+def parse_user_data_xml():
     """
-    Import and format data from users.xml
+    Parse and format data from users.xml
     """
     with open('runtime/data/users.xml', 'r') as xmlfile:
         tree = etree.parse(xmlfile)
@@ -92,12 +92,10 @@ def import_user_xml_form_url():
     """
     Import and save users.xml form URL
     """
-    url = app.config['USERS_DATA_XML_URL']
-    web_file = urllib.urlopen("url")
-    local_file = open.app.config('USERS_DATA_XML', 'w')
-    local_file.write(web_file.read())
-    web_file.close()
-    local_file.close()
+    with open(app.config['USERS_DATA_XML'], 'wb') as local_file:
+        url = app.config['USERS_DATA_XML_URL']
+        web_file = urllib.urlopen("url")
+        local_file.write(web_file.read())
 
 
 def group_by_weekday(items):

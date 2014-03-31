@@ -74,7 +74,7 @@ def users_view_xml():
     """
     Users listing with names and avatars for dropdown.
     """
-    result = utils.import_user_data_xml()
+    result = utils.parse_user_data_xml()
     return result
 
 
