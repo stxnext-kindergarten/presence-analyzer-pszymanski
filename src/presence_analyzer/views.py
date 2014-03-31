@@ -6,12 +6,12 @@ import calendar
 from flask import redirect, url_for
 from flask.ext.mako import render_template, MakoTemplates
 from presence_analyzer.main import app
-from presence_analyzer import utils
 from presence_analyzer.utils import (
     jsonify,
     get_data,
     mean,
     group_by_weekday,
+    parse_user_data_xml,
     mean_group_by_weekday_seconds
 )
 
@@ -35,7 +35,10 @@ def presence_weekday():
     """
     Render presence weekday page.
     """
-    return render_template('presence_weekday.html', name='presence_weekday')
+    return render_template(
+        'presence_weekday.html',
+        name='presence_weekday'
+        )
 
 
 @app.route('/chart/mean_time_weekday')
@@ -43,7 +46,10 @@ def mean_time_weekday():
     """
     Render presence mean time page.
     """
-    return render_template('mean_time_weekday.html', name='mean_time_weekday')
+    return render_template(
+        'mean_time_weekday.html',
+        name='mean_time_weekday'
+        )
 
 
 @app.route('/chart/presence_start_end')
@@ -74,8 +80,7 @@ def users_view_xml():
     """
     Users listing with names and avatars for dropdown.
     """
-    result = utils.parse_user_data_xml()
-    return result
+    return parse_user_data_xml()
 
 
 @app.route('/api/v1/mean_time_weekday/')
