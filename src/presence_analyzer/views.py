@@ -35,10 +35,7 @@ def presence_weekday():
     """
     Render presence weekday page.
     """
-    return render_template(
-        'presence_weekday.html',
-        name='presence_weekday'
-        )
+    return render_template('presence_weekday.html')
 
 
 @app.route('/chart/mean_time_weekday')
@@ -46,10 +43,7 @@ def mean_time_weekday():
     """
     Render presence mean time page.
     """
-    return render_template(
-        'mean_time_weekday.html',
-        name='mean_time_weekday'
-        )
+    return render_template('mean_time_weekday.html')
 
 
 @app.route('/chart/presence_start_end')
@@ -57,10 +51,7 @@ def presence_start_end():
     """
     Test presence start end page.
     """
-    return render_template(
-        'presence_start_end.html',
-        name='presence_start_end'
-        )
+    return render_template('presence_start_end.html')
 
 
 @app.route('/api/v1/users', methods=['GET'])
