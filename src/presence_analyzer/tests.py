@@ -220,7 +220,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Get rid of unused objects after each test.
         """
-        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        pass
 
     def test_get_data(self):
         """
