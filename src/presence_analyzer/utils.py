@@ -37,7 +37,7 @@ def jsonify(function):
     return inner
 
 
-def locker_function(function):
+def locker(function):
     """
     Creates locking function decorator.
     """
@@ -75,7 +75,7 @@ def memorize_data(key, cache_time):
     return wraps_function
 
 
-@locker_function
+@locker
 @memorize_data('user_data', 3600)
 def get_data():
     """
