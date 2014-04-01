@@ -1,0 +1,78 @@
+
+def lock(function):
+
+    def locker(*args, **kwargs):
+        lock = threading.Lock()
+        with lock:
+            return function(*args, **kwargs)
+    return locker
+
+
+
+
+
+    def memorize(function):
+        """
+         Creates a cache for the get_data function
+        """
+        function.cache = {}
+        function.cache_time = {}
+
+        def call_cache(function, *args):
+            """
+            inner function for Cache
+            """
+            if function.cache.has_key(args):
+                return function.cache[args]
+            else:
+                result = function(*args)
+                function.cache[args] = result
+                return result
+        return decorator(call_cache, function)
+
+
+
+
+
+
+@locker()
+
+
+
+
+def timestamp_data(*args, **kwargs):
+    function.cache_time = {}
+    if time.time() - function.cache_time > 5:
+        return CacheTimeout
+
+
+
+
+def memorize(function, *args):
+    """
+     Creates a cache for the get_data function
+    """
+    function.cache = {}
+    function.cache_time = {}
+
+    def call_cache(function, *args):
+        """
+        inner function for Cache
+        """
+        if function.cache.has_key(args):
+            return function.cache[args]
+        else:
+            result = function(*args)
+            function.cache[args] = result
+            return result
+    return decorator(call_cache, function)
+
+
+
+
+
+
+
+
+
+
