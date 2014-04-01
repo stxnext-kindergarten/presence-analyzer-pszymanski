@@ -3,10 +3,11 @@
 Helper functions used in views.
 """
 
-
 import csv
+import time
 import urllib
 import logging
+import threading
 from json import dumps
 from lxml import etree
 from functools import wraps
@@ -14,7 +15,12 @@ from flask import Response
 from datetime import datetime
 from presence_analyzer.main import app
 
+
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
+
+CACHE = {}
+TIMESTAMPS = {}
+LOCKER = threading.Lock()
 
 
 def jsonify(function):
@@ -31,6 +37,46 @@ def jsonify(function):
     return inner
 
 
+def locker(function):
+    """
+    Creates locking function decorator.
+    """
+    @wraps(function)
+    def inner_locker(*args, **kwargs):
+        """
+        Lock selected function.
+        """
+        with LOCKER:
+            return function(*args, **kwargs)
+    return inner_locker
+
+
+def memorize_data(key, cache_time):
+    """
+    Caching decorator to global variable.
+    """
+    def wraps_function(function):
+        """
+        Fix name and doc function for better debugging.
+        """
+        @wraps(function)
+        def inner_function(*args, **kwargs):
+            """
+            Inner function, cache function data and set cache timer.
+            """
+            timestamp = TIMESTAMPS.get(key, 0)
+            if cache_time + timestamp > time.time():
+                return CACHE[key]
+            result = function(*args, **kwargs)
+            CACHE[key] = result
+            TIMESTAMPS[key] = time.time()
+            return result
+        return inner_function
+    return wraps_function
+
+
+@locker
+@memorize_data('user_data', 3600)
 def get_data():
     """
     Extracts presence data from CSV file and groups it by user_id.

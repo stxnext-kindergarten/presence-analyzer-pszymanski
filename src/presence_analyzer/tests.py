@@ -14,6 +14,11 @@ TEST_DATA_CSV = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data.csv'
 )
 
+TEST_CACHE_DATA = os.path.join(
+    os.path.dirname(__file__),
+    '..', '..', 'runtime', 'data', 'test_cache_data.csv'
+)
+
 
 # pylint: disable=E1103
 class PresenceAnalyzerViewsTestCase(unittest.TestCase):
@@ -207,6 +212,8 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Before each test, set up a environment.
         """
+        utils.CACHE = {}
+        utils.TIMESTAMPS = {}
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
 
     def tearDown(self):
@@ -227,6 +234,19 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertItemsEqual(data[10][sample_date].keys(), ['start', 'end'])
         self.assertEqual(data[10][sample_date]['start'],
                          datetime.time(9, 39, 5))
+
+    def test_cache_get_data(self):
+        """
+        Test Caching decorator to global variable.
+        """
+        data = utils.get_data()
+        main.app.config.update({'DATA_CSV': TEST_CACHE_DATA})
+        cache_data = utils.get_data()
+        self.assertEqual(data, cache_data)
+        utils.CACHE = {}
+        utils.TIMESTAMPS = {}
+        new_data = utils.get_data()
+        self.assertNotEqual(data, new_data)
 
     def test_group_by_weekday(self):
         """
