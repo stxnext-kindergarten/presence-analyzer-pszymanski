@@ -212,13 +212,15 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Before each test, set up a environment.
         """
+        utils.CACHE = {}
+        utils.TIMESTAMPS = {}
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
 
     def tearDown(self):
         """
         Get rid of unused objects after each test.
         """
-        pass
+        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
 
     def test_get_data(self):
         """
@@ -238,9 +240,13 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         Test Caching decorator to global variable.
         """
         data = utils.get_data()
-        main.app.config.update({'TEST_DATA_CSV': TEST_CACHE_DATA})
+        main.app.config.update({'DATA_CSV': TEST_CACHE_DATA})
         cache_data = utils.get_data()
         self.assertEqual(data, cache_data)
+        utils.CACHE = {}
+        utils.TIMESTAMPS = {}
+        new_data = utils.get_data()
+        self.assertNotEqual(data, new_data)
 
     def test_group_by_weekday(self):
         """
