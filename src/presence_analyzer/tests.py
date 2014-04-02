@@ -19,6 +19,10 @@ TEST_CACHE_DATA = os.path.join(
     '..', '..', 'runtime', 'data', 'test_cache_data.csv'
 )
 
+TEST_USERS_XML = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_users.xml'
+)
+
 
 # pylint: disable=E1103
 class PresenceAnalyzerViewsTestCase(unittest.TestCase):
@@ -30,7 +34,8 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         Before each test, set up a environment.
         """
-        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config.update({
+            'DATA_CSV': TEST_DATA_CSV, 'USERS_XML': TEST_USERS_XML})
         self.client = main.app.test_client()
 
     def tearDown(self):
@@ -81,23 +86,21 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
 
     def test_users_view_xml(self):
         """
-        Test correct return new users api
+        Test return new users api in sorted order
         """
         resp = self.client.get('/api/v2/users')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        # user_10
-        self.assertDictEqual(data['10'], {
-            u'avatar': u'https://intranet.stxnext.pl/api/images/users/10',
-            u'name': u'Maciej Z.'
-            })
-
-        # user_11
-        self.assertDictEqual(data['11'], {
+        self.assertEqual(data, [{
+            u'id': 11,
             u'avatar': u'https://intranet.stxnext.pl/api/images/users/11',
             u'name': u'Maciej D.'
-            })
+            },
+            {
+            u'id': 10,
+            u'avatar': u'https://intranet.stxnext.pl/api/images/users/10',
+            u'name': u'Maciej Z.'}])
 
     def test_mean_time_weekday_view(self):
         """
@@ -214,7 +217,8 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         utils.CACHE = {}
         utils.TIMESTAMPS = {}
-        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config.update({
+            'DATA_CSV': TEST_DATA_CSV, 'USERS_XML': TEST_USERS_XML})
 
     def tearDown(self):
         """

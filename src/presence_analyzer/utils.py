@@ -6,6 +6,8 @@ Helper functions used in views.
 import csv
 import time
 import urllib
+import locale
+import codecs
 import logging
 import threading
 from json import dumps
@@ -120,18 +122,30 @@ def parse_user_data_xml():
     """
     Parse and format data from users.xml
     """
+    data = []
     with open('runtime/data/users.xml', 'r') as xmlfile:
         tree = etree.parse(xmlfile)
-        server = tree.find('./server')
-        protocol = server.find('./protocol').text
-        host = server.find('./host').text
+        server = tree.find('server')
+        protocol = server.findtext('protocol')
+        host = server.findtext('host')
         additional = '://'
-        url = protocol + additional + host
-        return {
-            user.attrib['id']: {
-                'name': user.find('./name').text,
-                'avatar': url + user.find('./avatar').text}
-            for user in tree.findall('./users/user')}
+        url = '{}{}{}'.format(protocol, additional, host)
+        users = tree.findall('./users/user')
+        locale.setlocale(locale.LC_ALL, "pl_PL.UTF-8")
+        data = [
+            {
+                u'id': int(user.attrib[u'id']),
+                u'name': unicode(user.findtext('name')),
+                u'avatar': unicode('{}{}'.format(url, user.findtext('avatar')))
+            } for user in sorted(
+                users,
+                key=lambda k: k.find('./name').text,
+                cmp=locale.strcoll
+            )
+        ]
+        locale.setlocale(locale.LC_ALL, (None, None))
+    print data
+    return data
 
 
 def import_user_xml_form_url():
