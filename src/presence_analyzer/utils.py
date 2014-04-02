@@ -114,7 +114,6 @@ def get_data():
                 log.debug('Problem with line %d: ', i, exc_info=True)
 
             data.setdefault(user_id, {})[date] = {'start': start, 'end': end}
-
     return data
 
 
@@ -144,7 +143,6 @@ def parse_user_data_xml():
             )
         ]
         locale.setlocale(locale.LC_ALL, (None, None))
-    print data
     return data
 
 
