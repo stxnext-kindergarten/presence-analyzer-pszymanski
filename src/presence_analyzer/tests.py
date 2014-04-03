@@ -92,15 +92,14 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(data, [{
-            u'id': 11,
-            u'avatar': u'https://intranet.stxnext.pl/api/images/users/11',
-            u'name': u'Maciej D.'
-            },
-            {
-            u'id': 10,
-            u'avatar': u'https://intranet.stxnext.pl/api/images/users/10',
-            u'name': u'Maciej Z.'}])
+        self.assertEqual(data, [
+            {u'id': 11,
+             u'avatar': u'https://intranet.stxnext.pl/api/images/users/11',
+             u'name': u'Maciej D.'},
+            {u'id': 10,
+             u'avatar': u'https://intranet.stxnext.pl/api/images/users/10',
+             u'name': u'Maciej Z.'}
+            ])
 
     def test_mean_time_weekday_view(self):
         """

@@ -7,7 +7,6 @@ import csv
 import time
 import urllib
 import locale
-import codecs
 import logging
 import threading
 from json import dumps
@@ -127,8 +126,7 @@ def parse_user_data_xml():
         server = tree.find('server')
         protocol = server.findtext('protocol')
         host = server.findtext('host')
-        additional = '://'
-        url = '{}{}{}'.format(protocol, additional, host)
+        url = '{}://{}'.format(protocol, host)
         users = tree.findall('./users/user')
         locale.setlocale(locale.LC_ALL, "pl_PL.UTF-8")
         data = [
