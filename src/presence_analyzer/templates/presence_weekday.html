@@ -34,12 +34,18 @@
                         loading.show();
                         chart_div.hide();
                         $.getJSON("${ url_for('presence_weekday_view') }" + selected_user, function (result) {
-                            var data = google.visualization.arrayToDataTable(result);
-                            var options = {};
-                            chart_div.show();
-                            loading.hide();
-                            var chart = new google.visualization.PieChart(chart_div[0]);
-                            chart.draw(data, options);
+                            if(result.length) {
+                                $("#error").hide();
+                                var data = google.visualization.arrayToDataTable(result);
+                                var options = {};
+                                chart_div.show();
+                                loading.hide();
+                                var chart = new google.visualization.PieChart(chart_div[0]);
+                                chart.draw(data, options);
+                            } else {
+                                loading.hide();
+                                $("#error").show();
+                            }
                         });
                     }
                 });
